@@ -3,6 +3,7 @@ import sqlite3
 
 @route('/recommend')
 def recommend():
+
     try:
         conn=sqlite3.connect('recommend.sqlite3')
         c=conn.cursor()
@@ -12,7 +13,9 @@ def recommend():
         print('エラー!')
         print(e)
     finally:
+        c.close()
         conn.close()
+
 
     return template('recommend.html',top_articles=top_articles)
 

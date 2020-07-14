@@ -13,6 +13,7 @@ import re
 import sqlite3
 import math
 
+
 tagger=MeCab.Tagger('')
 tagger.parse('')
 
@@ -64,13 +65,14 @@ def main():
     
     evaluate_articles(articles_all,top_words,frequency_all,body_all)
 
+    
     try:
         conn=sqlite3.connect('recommend.sqlite3')
         c=conn.cursor()
         c.execute('DROP TABLE IF EXISTS articles')
         c.execute('CREATE TABLE articles(id INTEGER PRIMARY KEY AUTOINCREMENT,title char(200),category char(20),like INTEGER,point INTEGER,url char(100),description char(500));')
 
-        for i in range(20):
+        for i in range(3):
             title_=articles_all[i]['title']
             category_=articles_all[i]['category']
             like_=articles_all[i]['like']
@@ -85,13 +87,14 @@ def main():
             print()
 
             c.execute('INSERT INTO articles(title,category,like,point,url,description) VALUES(?,?,?,?,?,?)',(title_,category_,like_,point_,url_,description_))
+
+            conn.commit()
     except sqlite3.Error as e:
         print('接続エラー!:')
         print(e)
     finally:
-        conn.commit()
-        conn.close()   
-
+        c.close()
+        conn.close()
 
         
     with open('analysis.txt','w') as file:
