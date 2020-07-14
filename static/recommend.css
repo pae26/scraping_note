@@ -1,0 +1,39 @@
+body{
+    background-color: #eeece9;
+    margin: 0 300px;
+}
+header{
+    text-align: center;
+}
+#logo{
+    width: 30%;
+    height: 30%;
+    position: relative;
+    top: 50px;
+}
+.headline{
+    color: #000;
+    display: block;
+    width: 200px;
+    margin:50px 10px;
+    background-color: #fff;
+    padding: .25em 30px .5em .75em;
+    border-left: 6px solid #3dd1c5;
+    border-bottom: 1px solid #ccc;
+}
+#top_words{
+    text-align: center;
+    background-color: #fff;
+    margin-left: 200px;
+    margin-right: 200px;
+    height: 300px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+.top_word{
+    text-align: center;
+}
+#articles{
+    background-color: #fff;
+    padding: 5px 10px 0 10px;
+}

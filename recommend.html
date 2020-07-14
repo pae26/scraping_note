@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>noteおすすめ記事表示</title>
+        <link rel="stylesheet" type="text/css" href="/static/recommend.css">
+    </head>
+    <body>
+        <header>
+            <h1><!--<img src="/static/logo.png" id="logo">--><span id="title">noteおすすめ記事一覧</span></h1>
+            <hr>
+        </header>
+        <h2 class="headline">
+            頻出単語評価値
+        </h2>
+        <div id="center_div">
+            <div id="top_words">
+                %file=open('analysis.txt','r')
+            
+                %#evaluates=file.read().split(':')
+                %for row in file:
+                    <p>{{row}}</p>
+                %end
+                %file.close();
+            </div>
+        </div>
+        <h2 class="headline">
+            おすすめ記事一覧
+        </h2>
+        <div id="articles">
+        %for top_article in top_articles:
+            <div>
+                <h3>{{top_article[1]}}</h3>
+                <p>いいね:{{top_article[3]}}</p>
+                <p>評価値:{{top_article[4]}}</p>
+                <p>url:<a href={{top_article[5]}} target="_blank">{{top_article[5]}}</a></p>
+                <p>{{top_article[6]}}</p>
+            </div>
+            <hr>
+        %end
+        </div>
+    </body>
+</html>
