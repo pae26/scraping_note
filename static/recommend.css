@@ -1,6 +1,6 @@
 body{
     background-color: #eeece9;
-    margin: 0 300px;
+    margin: 0 200px;
 }
 header{
     text-align: center;
@@ -11,22 +11,29 @@ header{
     position: relative;
     top: 50px;
 }
+span.t{
+    color: #3dd1c5;
+}
 .headline{
     color: #000;
     display: block;
     width: 200px;
-    margin:50px 10px;
+    margin:30px 10px;
     background-color: #fff;
     padding: .25em 30px .5em .75em;
     border-left: 6px solid #3dd1c5;
     border-bottom: 1px solid #ccc;
 }
-#top_words{
-    text-align: center;
-    background-color: #fff;
-    margin-left: 200px;
-    margin-right: 200px;
+.words_div{
+    display: inline;
+}
+.top_words{
+    display: inline-block;
+    text-align: left;
     height: 300px;
+    width: 100%;
+    background-color: #fff;
+    margin: 0;
     overflow: hidden;
     overflow-y: scroll;
 }
@@ -37,3 +44,45 @@ header{
     background-color: #fff;
     padding: 5px 10px 0 10px;
 }
+.data{
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+}
+.data_one{
+    display: inline;
+    width: 49%;
+    margin: 0 2px;
+}
+img{
+    height: 100%;
+    width: 100%;
+}
+.rank{
+    text-align: left;
+    margin: 0 5px;
+}
+.center_div{
+    text-align: center;
+    margin-bottom: 20px;
+}
+strong{
+    font-size: x-large;
+}
+/*#change_keyword{
+    display: block;
+    text-align: center;
+}
+#change_keyword{
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 40px;
+    font-weight: bold;
+    font-size: large;
+    padding: 0.25em 0.5em;
+    text-decoration: none;
+    color: #FFF;
+    background: #3dd1c5;
+    transition: .4s;
+}*/

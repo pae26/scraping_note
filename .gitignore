@@ -1,4 +1,5 @@
 venv/
+test/
 .env
 .DS_Store
 *.txt

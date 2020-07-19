@@ -4,37 +4,80 @@
         <meta charset="utf-8">
         <title>noteおすすめ記事表示</title>
         <link rel="stylesheet" type="text/css" href="/static/recommend.css">
+        <!--<script src="/static/jquery-3.4.1.min.js"></script>-->
     </head>
     <body>
         <header>
-            <h1><!--<img src="/static/logo.png" id="logo">--><span id="title">noteおすすめ記事一覧</span></h1>
+            <h1><!--<img src="/static/logo.png" id="logo">--><span id="title">noteおすすめ記事</span></h1>
             <hr>
         </header>
-        <h2 class="headline">
-            頻出単語評価値
-        </h2>
-        <div id="center_div">
-            <div id="top_words">
-                %file=open('analysis.txt','r')
-            
-                %#evaluates=file.read().split(':')
-                %for row in file:
-                    <p>{{row}}</p>
-                %end
-                %file.close();
+
+        <!--
+        <h2 class="headline">キーワード設定</h2>
+        <div class="center_div">
+            新しいキーワード：
+            <input type="text" size=20 id="new_keyword">
+        </div>
+        <div class="center_div">
+            パスワード　　　：
+            <input type="password" size=20 id="password">
+        </div>
+        <div class="center_div">
+            <button type="button" id="change_keyword">変更</button>
+        </div>-->
+
+
+        <h2 class="headline">取得情報</h2>
+        <div class="center_div">
+            <h3 id="keyword">キーワード：<strong>休校</strong></h3>
+        </div>
+        <div class="data">
+            <div class="data_one">
+                <h3 class="subtitle">単語別取得数</h3>
+                <div>
+                    <img src="static/words_count.png">
+                </div>
+                <div class="words_div">
+                    <div class="top_words">
+                        %count=1
+                        %for counts in elements[1]:
+                            <p><span class="rank">{{count}}：</span>{{counts}}</p>
+                            %count+=1
+                        %end
+                    </div>
+                </div>
+            </div>
+            <div class="data_one">
+                <h3 class="subtitle">単語別評価値</h3>
+                <div>
+                    <img src="static/frequency_words.png">
+                </div>
+                <div class="words_div">
+                    <div class="top_words">
+                        %count=1
+                        %for evaluate in elements[2]:
+                            <p><span class="rank">{{count}}：</span>{{evaluate}}</p>
+                            %count+=1
+                        %end
+                        </div>
+                    </div>
             </div>
         </div>
+        
+        
+
         <h2 class="headline">
             おすすめ記事一覧
         </h2>
         <div id="articles">
-        %for top_article in top_articles:
+        %for top_article in elements[0]:
             <div>
                 <h3>{{top_article[1]}}</h3>
-                <p>いいね:{{top_article[3]}}</p>
-                <p>評価値:{{top_article[4]}}</p>
-                <p>url:<a href={{top_article[5]}} target="_blank">{{top_article[5]}}</a></p>
-                <p>{{top_article[6]}}</p>
+                <div>カテゴリー：{{top_article[2]}}</div>
+                <div>いいね　　：{{top_article[3]}}</div>
+                <div>評価値　　：{{top_article[4]}}</div>
+                <p><a href={{top_article[5]}} target="_blank">{{top_article[5]}}</a></p>
+                <div>{{top_article[6]}}</div>
             </div>
             <hr>
         %end
