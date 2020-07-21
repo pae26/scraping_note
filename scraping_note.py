@@ -52,6 +52,7 @@ def main():
     scraping_category(articles_all,keyword,'like',frequency_all_like,body_all,title_all,word_count_in_article)
     word_count_all+=frequency_all_like
 
+
     with open('count_words.txt','w') as file:
         for word,count in word_count_all.most_common(30):
             file.write(word+'\t'+str(count)+'\n')
@@ -215,7 +216,7 @@ def login_and_get_search_history():
 #カテゴリー別記事取得
 def scraping_category(articles_all,keyword,category,frequency_all,body_all,title_all,word_count_in_article):
     url=base_url.format(keyword,category)
-    articles_category=get_articles(url,frequency_all,category,title_all,20,100)
+    articles_category=get_articles(url,frequency_all,category,title_all,30,100)
     analysis_articles(articles_category,frequency_all,body_all,category,word_count_in_article)
 
     if category=='like':
@@ -380,7 +381,7 @@ def evaluate_articles(articles_all,top_words,frequency_all,body,word_count_in_ar
                 if frequency_one[top_word]>20:
                     frequency_one[top_word]=20
 
-                words_count_one.append(math.log10(frequency_one[top_word]))
+                words_count_one.append(frequency_one[top_word])#math.log10(frequency_one[top_word]))
             else:
                 words_count_one.append(0)
         
@@ -416,9 +417,9 @@ def evaluate_articles(articles_all,top_words,frequency_all,body,word_count_in_ar
     for i in range(len(articles_all)):
         point=0
         for j in range(len(top_words)):
-            point+=(frequency_all[top_words[j]] * words_count_all[i][j]) / words_total_all[i]
+            point+=(frequency_all[top_words[j]] * words_count_all[i][j])
         
-        articles_all[i]['point']=point
+        articles_all[i]['point']=point / words_total_all[i]
         point_all+=point
         if(articles_all[i]['category']=='new'):
             sum_like+=1.2**articles_all[i]['like']
@@ -434,6 +435,9 @@ def evaluate_articles(articles_all,top_words,frequency_all,body,word_count_in_ar
             article_like=article['like'] / words_total_all[i_]
 
         article['point']=(article['point'] / point_all) + (article_like / sum_like)
+
+        if article['point'] - short_articles[i_] < 0 :
+            article['point']=0
         article['point']-=short_articles[i_]
         sum_point+=article['point']
 
