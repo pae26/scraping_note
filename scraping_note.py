@@ -2,7 +2,6 @@
 
 import os
 import requests
-import math
 import time
 import datetime
 from collections import Counter
@@ -93,7 +92,6 @@ def main():
     y_max_count=y_total_count[np.argmax(y_total_count)]
 
     
-    #plt.grid(True)
     p_like=plt.bar(x,y_like_count,color="green")
     p_popular=plt.bar(x,y_popular_count,bottom=y_like_count,color="yellow")
     p_hot=plt.bar(x,y_hot_count,bottom=y_like_count+y_popular_count,color="red")
@@ -116,7 +114,6 @@ def main():
     count_total_frequency(frequency_all,frequency_all_like,'like')
 
 
-    #evaluate_all=Counter()
     sum_all=sum(sorted(list(frequency_all.values()),reverse=True)[0:30])
     for word,count in frequency_all.items():
         frequency_all[word]=count/sum_all
@@ -252,7 +249,6 @@ def count_total_frequency(frequency_all,frequency_category,category):
 def get_articles(url,frequency_all,category,title_all,scroll_page,max_articles):
     driver.get(url)
     assert 'note' in driver.title
-
     print('カテゴリー:'+category)
     print('ページを読み込んでいます...')
     for i in range(scroll_page):
@@ -262,7 +258,6 @@ def get_articles(url,frequency_all,category,title_all,scroll_page,max_articles):
 
     articles=[]
     article_count=0
-
     #記事取得
     print('URLを取得しています...')
     for d in driver.find_elements_by_css_selector('.o-timelineNoteItem'):
@@ -274,7 +269,12 @@ def get_articles(url,frequency_all,category,title_all,scroll_page,max_articles):
         article_count+=1
         url=d.find_element_by_css_selector('a').get_attribute('href')
         try:
-            like=int(d.find_element_by_css_selector('.o-noteStatus__label').text)
+            like_s=d.find_element_by_css_selector('.o-noteStatus__label').text
+            if like_s.find(',')>=0:
+                like=0
+            else:
+                like=int(like_s)
+            
         except NoSuchElementException:
             like=0
         
@@ -291,7 +291,6 @@ def get_articles(url,frequency_all,category,title_all,scroll_page,max_articles):
             'description':description,
         })
         time.sleep(2)
-
         if article_count==max_articles:
             break
     
@@ -371,17 +370,17 @@ def evaluate_articles(articles_all,top_words,frequency_all,body,word_count_in_ar
     words_total_all=[]
     frequency_one=Counter()
 
-    #記事単語評価
+    #記事内に出現する頻出単語表内の単語をカウント
     for i in range(len(articles_all)):
         words_count_one=[]
         words=get_words(body[i])
         frequency_one.update(words)
         for top_word in top_words:
             if top_word in list(frequency_one.keys()):
-                if frequency_one[top_word]>20:
-                    frequency_one[top_word]=20
+                if frequency_one[top_word]>10:
+                    frequency_one[top_word]=10
 
-                words_count_one.append(frequency_one[top_word])#math.log10(frequency_one[top_word]))
+                words_count_one.append(frequency_one[top_word])
             else:
                 words_count_one.append(0)
         
@@ -408,12 +407,11 @@ def evaluate_articles(articles_all,top_words,frequency_all,body,word_count_in_ar
         relative_count=short_articles[i] / short_articles_sum
         short_articles[i]=short_articles_sum - relative_count
 
-
-    #記事評価
+    
     point_all=0
     sum_like=0
     sum_point=0
-    #単語編
+    #単語評価
     for i in range(len(articles_all)):
         point=0
         for j in range(len(top_words)):
@@ -426,7 +424,7 @@ def evaluate_articles(articles_all,top_words,frequency_all,body,word_count_in_ar
         else:
             sum_like+=articles_all[i]['like']
     
-    #いいね編
+    #いいね評価
     i_=0
     for article in articles_all:
         if(article['category']=='new'):
@@ -438,11 +436,11 @@ def evaluate_articles(articles_all,top_words,frequency_all,body,word_count_in_ar
 
         if article['point'] - short_articles[i_] < 0 :
             article['point']=0
-        article['point']-=short_articles[i_]
+        else:
+            article['point']-=short_articles[i_]
         sum_point+=article['point']
 
         i_+=1
-
     
 
     for article in articles_all:
